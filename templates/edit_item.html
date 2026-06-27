@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Barang{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card">
+            <div class="card-header bg-warning text-dark">
+                <i class="bi bi-pencil"></i> Edit Barang: {{ item.name }}
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="name" class="form-label">Nama Barang *</label>
+                            <input type="text" class="form-control" id="name" name="name" value="{{ item.name }}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="category" class="form-label">Kategori *</label>
+                            <select class="form-control" id="category" name="category" required>
+                                <option value="kopi" {% if item.category == 'kopi' %}selected{% endif %}>Kopi</option>
+                                <option value="kemasan" {% if item.category == 'kemasan' %}selected{% endif %}>Kemasan</option>
+                                <option value="peralatan" {% if item.category == 'peralatan' %}selected{% endif %}>Peralatan</option>
+                                <option value="lainnya" {% if item.category == 'lainnya' %}selected{% endif %}>Lainnya</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="stock" class="form-label">Stok *</label>
+                            <input type="number" class="form-control" id="stock" name="stock" min="0" value="{{ item.stock }}" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="min_stock" class="form-label">Stok Minimal *</label>
+                            <input type="number" class="form-control" id="min_stock" name="min_stock" min="0" value="{{ item.min_stock }}" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="unit" class="form-label">Satuan *</label>
+                            <input type="text" class="form-control" id="unit" name="unit" value="{{ item.unit }}" required>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="price" class="form-label">Harga (Rp) *</label>
+                            <input type="number" class="form-control" id="price" name="price" min="0" step="0.01" value="{{ item.price }}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="sales_count" class="form-label">Jumlah Terjual</label>
+                            <input type="number" class="form-control" id="sales_count" name="sales_count" min="0" value="{{ item.sales_count }}">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="is_combo" name="is_combo" {% if item.is_combo %}checked{% endif %}>
+                            <label class="form-check-label" for="is_combo">
+                                <i class="bi bi-link"></i> Barang Kombo
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="mb-3" id="combo_items_section" style="display: {% if item.is_combo %}block{% else %}none{% endif %};">
+                        <label class="form-label">Pilih Item Kombo</label>
+                        <select class="form-control" id="combo_items" name="combo_items" multiple>
+                            {% for it in items %}
+                            <option value="{{ it.id }}" {% if it.id in item.combo_items %}selected{% endif %}>
+                                {{ it.name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                        <small class="text-muted">Tahan Ctrl untuk memilih lebih dari satu</small>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-warning">
+                            <i class="bi bi-save"></i> Update Barang
+                        </button>
+                        <a href="{{ url_for('index') }}" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> Kembali
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('is_combo').addEventListener('change', function() {
+    const section = document.getElementById('combo_items_section');
+    if (this.checked) {
+        section.style.display = 'block';
+    } else {
+        section.style.display = 'none';
+    }
+});
+</script>
+{% endblock %}

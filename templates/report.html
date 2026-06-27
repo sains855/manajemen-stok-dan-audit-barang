@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+
+{% block title %}Laporan Stok{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <h2><i class="bi bi-file-earmark-text"></i> Laporan Stok Barang</h2>
+        <hr>
+    </div>
+</div>
+
+<!-- Statistics Cards -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <h5 class="card-title">Total Item</h5>
+                <h3>{{ total_items }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <h5 class="card-title">Total Stok</h5>
+                <h3>{{ total_stock }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-warning text-dark">
+            <div class="card-body">
+                <h5 class="card-title">Nilai Total</h5>
+                <h3>Rp {{ "{:,.0f}".format(total_value) }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <h5 class="card-title">Prioritas Tinggi</h5>
+                <h3>{{ high_priority|length }}</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Priority Groups -->
+<div class="row">
+    <div class="col-md-12">
+        <ul class="nav nav-tabs" id="priorityTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="high-tab" data-bs-toggle="tab" data-bs-target="#high" type="button">
+                    🔴 Prioritas Tinggi ({{ high_priority|length }})
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="medium-tab" data-bs-toggle="tab" data-bs-target="#medium" type="button">
+                    🟡 Prioritas Sedang ({{ medium_priority|length }})
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="low-tab" data-bs-toggle="tab" data-bs-target="#low" type="button">
+                    🟢 Prioritas Rendah ({{ low_priority|length }})
+                </button>
+            </li>
+        </ul>
+
+        <div class="tab-content mt-3" id="priorityTabContent">
+            <!-- High Priority -->
+            <div class="tab-pane fade show active" id="high" role="tabpanel">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Nama Barang</th>
+                                <th>Kategori</th>
+                                <th>Stok</th>
+                                <th>Terjual</th>
+                                <th>Harga</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in high_priority %}
+                            <tr>
+                                <td>{{ item.name }}</td>
+                                <td>{{ item.category }}</td>
+                                <td>{{ item.stock }} {{ item.unit }}</td>
+                                <td>{{ item.sales_count }}</td>
+                                <td>Rp {{ "{:,.0f}".format(item.price) }}</td>
+                                <td>
+                                    <span class="badge {% if item.stock <= item.min_stock %}bg-danger{% else %}bg-success{% endif %}">
+                                        {% if item.stock <= item.min_stock %}Stok Habis{% else %}Cukup{% endif %}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Medium Priority -->
+            <div class="tab-pane fade" id="medium" role="tabpanel">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Nama Barang</th>
+                                <th>Kategori</th>
+                                <th>Stok</th>
+                                <th>Terjual</th>
+                                <th>Harga</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in medium_priority %}
+                            <tr>
+                                <td>{{ item.name }}</td>
+                                <td>{{ item.category }}</td>
+                                <td>{{ item.stock }} {{ item.unit }}</td>
+                                <td>{{ item.sales_count }}</td>
+                                <td>Rp {{ "{:,.0f}".format(item.price) }}</td>
+                                <td>
+                                    <span class="badge {% if item.stock <= item.min_stock %}bg-danger{% else %}bg-success{% endif %}">
+                                        {% if item.stock <= item.min_stock %}Stok Habis{% else %}Cukup{% endif %}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Low Priority -->
+            <div class="tab-pane fade" id="low" role="tabpanel">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Nama Barang</th>
+                                <th>Kategori</th>
+                                <th>Stok</th>
+                                <th>Terjual</th>
+                                <th>Harga</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in low_priority %}
+                            <tr>
+                                <td>{{ item.name }}</td>
+                                <td>{{ item.category }}</td>
+                                <td>{{ item.stock }} {{ item.unit }}</td>
+                                <td>{{ item.sales_count }}</td>
+                                <td>Rp {{ "{:,.0f}".format(item.price) }}</td>
+                                <td>
+                                    <span class="badge {% if item.stock <= item.min_stock %}bg-danger{% else %}bg-success{% endif %}">
+                                        {% if item.stock <= item.min_stock %}Stok Habis{% else %}Cukup{% endif %}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Action Buttons -->
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <a href="{{ url_for('send_report') }}" class="btn btn-success">
+                <i class="bi bi-whatsapp"></i> Kirim Laporan ke WhatsApp
+            </a>
+            <button onclick="window.print()" class="btn btn-primary">
+                <i class="bi bi-printer"></i> Cetak Laporan
+            </button>
+            <a href="{{ url_for('index') }}" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Kembali
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
